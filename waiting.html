@@ -1,9 +1,13 @@
 <script type="text/javascript">
-    document.documentElement.requestFullscreen();
+    function fulsc() {
+        console.log("Requesting fullscreen");
+        document.documentElement.requestFullscreen();
+    }
 </script>
 <head>
     <title>AAAAAA</title>
 </head>
 <body>
     <h1>To be filled in</h1>
+    <button id="fulscbut" type="button" onclick="fulsc()">Go fullscreen</button>
 </body>

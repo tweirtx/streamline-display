@@ -13,6 +13,7 @@ fn main() {
             match taba {
                 Ok(tab) => {
                     tab.navigate_to("https://github.com/tweirtx").expect("Failed to navigate");
+                    tab.wait_for_element("fulscbut").expect("AA").click();
                     loop {
                         println!("Stay open");
                     }
