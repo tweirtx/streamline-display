@@ -12,8 +12,10 @@ fn main() {
             let taba = b.wait_for_initial_tab();
             match taba {
                 Ok(tab) => {
-                    tab.navigate_to("https://github.com/tweirtx").expect("Failed to navigate");
-                    tab.wait_for_element("fulscbut").expect("AA").click();
+                    tab.navigate_to("https://tweirtx.github.io/streamline-display/waiting").expect("Failed to navigate");
+                    tab.wait_until_navigated().expect("Could not navigate");
+                    tab.find_element("button").expect("AA").click().expect("AAAAAA");
+                    println!("Waited");
                     loop {
                         println!("Stay open");
                     }
