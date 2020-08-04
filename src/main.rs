@@ -13,7 +13,7 @@ fn main() {
             match taba {
                 Ok(tab) => {
                     tab.navigate_to("https://github.com/tweirtx").expect("Failed to navigate");
-                    while true {
+                    loop {
                         println!("Stay open");
                     }
                 }
