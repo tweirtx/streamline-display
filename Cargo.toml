@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 headless_chrome = "0.9.0"
+astro-dnssd = "0.1.3"
