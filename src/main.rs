@@ -1,10 +1,6 @@
 use headless_chrome::{Browser, LaunchOptionsBuilder};
-use astro_dnssd;
 
 fn main() {
-    let mut servicebrowser = astro_dnssd::browser::ServiceBrowserBuilder::new("streamline").build().expect("Error building DNS browser!");
-    let result = servicebrowser.process_result();
-    println!("{}", result);
     let browser = Browser::new(
         LaunchOptionsBuilder::default()
             .headless(false)
