@@ -1,6 +1,17 @@
 use headless_chrome::{Browser, LaunchOptionsBuilder};
+use std::thread;
+mod dns;
 
 fn main() {
+    let dnsargs = dns::Opt {
+        multicast_group: "239.255.70.77".parse().unwrap(),
+        host: "0.0.0.0".parse().unwrap(),
+        port: 50765,
+        command: dns::Command::Find { name: "streamline-control".parse().unwrap() }
+    };
+    thread::spawn(move || {
+        dns::run(dnsargs)
+    });
     let browser = Browser::new(
         LaunchOptionsBuilder::default()
             .headless(false)
