@@ -52,6 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: target/armv7-unknown-linux-gnueabihf/release/bundle/deb
+          asset_path: target/armv7-unknown-linux-gnueabihf/release/bundle/deb/
           asset_name: streamline-display_0.1.0_arm.deb
           asset_content_type: application/octet-stream
