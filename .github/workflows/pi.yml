@@ -35,8 +35,8 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          path: target/release/streamline-control
-          name: streamline-control-linux
+          path: target/armv7-unknown-linux-gnueabihf/release/bundle/deb
+          name: streamline-display_0.1.0_arm.deb
 
       - name: Get release
         if: ${{ github.event_name == 'release' }}
@@ -52,6 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: target/release/streamline-control
-          asset_name: streamline-control-linux
+          asset_path: target/armv7-unknown-linux-gnueabihf/release/bundle/deb
+          asset_name: streamline-display_0.1.0_arm.deb
           asset_content_type: application/octet-stream
