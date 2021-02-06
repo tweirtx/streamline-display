@@ -25,6 +25,10 @@ jobs:
       - name: Install ARM Rust Toolchain
         run: rustup target add armv7-unknown-linux-gnueabihf
 
+      - name: Set ARM linker
+        run: echo '[target.armv7-unknown-linux-gnueabihf]
+          linker = "arm-linux-gnueabihf-gcc"' > .cargo/config
+
       - name: Build
         run: cargo bundle --release --target=armv7-unknown-linux-gnueabihf
 

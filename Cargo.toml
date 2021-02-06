@@ -14,6 +14,3 @@ headless_chrome = "0.9.0"
 name = "Streamline Display"
 identifier = "me.tweirtx.streamline-display"
 deb_depends = ["chromium"]
-
-[target.armv7-unknown-linux-gnueabihf]
-linker = "gcc-arm-linux-gnueabihf"
