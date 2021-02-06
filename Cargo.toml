@@ -16,4 +16,4 @@ identifier = "me.tweirtx.streamline-display"
 deb_depends = ["chromium"]
 
 [target.armv7-unknown-linux-gnueabihf]
-linker = "arm-linux-gnueabihf-gcc"
+linker = "gcc-arm-linux-gnueabihf"
