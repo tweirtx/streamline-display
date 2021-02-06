@@ -27,7 +27,7 @@ jobs:
 
       - name: Set ARM linker
         run: echo '[target.armv7-unknown-linux-gnueabihf]
-          linker = "arm-linux-gnueabihf-gcc"' > .cargo/config
+          linker = "arm-linux-gnueabihf-gcc"' > ~/.cargo/config
 
       - name: Build
         run: cargo bundle --release --target=armv7-unknown-linux-gnueabihf
