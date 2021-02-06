@@ -1,0 +1,53 @@
+name: Pi
+on:
+  push:
+  pull_request:
+  release:
+    types: created
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cargo Cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install gcc-arm-linux-gnueabihf -y
+
+      - name: Install Cargo Bundle
+        run: cargo install cargo-bundle
+
+      - name: Install ARM Rust Toolchain
+        run: rustup target add armv7-unknown-linux-gnueabihf
+
+      - name: Build
+        run: cargo bundle --release --target=armv7-unknown-linux-gnueabihf
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          path: target/release/streamline-control
+          name: streamline-control-linux
+
+      - name: Get release
+        if: ${{ github.event_name == 'release' }}
+        id: get_release
+        uses: bruceadams/get-release@v1.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        if: ${{ github.event_name == 'release' }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: target/release/streamline-control
+          asset_name: streamline-control-linux
+          asset_content_type: application/octet-stream

@@ -3,8 +3,17 @@ name = "streamline-display"
 version = "0.1.0"
 authors = ["Travis Weir <tweirtx@gmail.com>"]
 edition = "2018"
+description = "Field display management component for Project Streamline."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 headless_chrome = "0.9.0"
+
+[package.metadata.bundle]
+name = "Streamline Display"
+identifier = "me.tweirtx.streamline-display"
+deb_depends = ["chromium"]
+
+[target.armv7-unknown-linux-gnueabihf]
+linker = "arm-linux-gnueabihf-gcc"
