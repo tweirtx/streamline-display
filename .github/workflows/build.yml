@@ -1,0 +1,16 @@
+name: Pi
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cargo Cache
+        uses: Swatinem/rust-cache@v1
+
+      - name: Build
+        run: cargo build --release
