@@ -19,8 +19,8 @@ jobs:
           sudo apt update
           sudo apt install gcc-arm-linux-gnueabihf -y
 
-      - name: Install Cargo Bundle
-        run: cargo install cargo-bundle
+      - name: Install Cargo Deb
+        run: cargo install cargo-deb
 
       - name: Install ARM Rust Toolchain
         run: rustup target add armv7-unknown-linux-gnueabihf
@@ -30,7 +30,7 @@ jobs:
           linker = "arm-linux-gnueabihf-gcc"' > ~/.cargo/config
 
       - name: Build
-        run: cargo bundle --release --target=armv7-unknown-linux-gnueabihf
+        run: cargo deb --target=armv7-unknown-linux-gnueabihf
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
