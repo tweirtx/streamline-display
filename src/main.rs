@@ -14,7 +14,7 @@ async fn main() {
         multicast_group: "239.255.70.77".parse().unwrap(),
         host: "0.0.0.0".parse().unwrap(),
         port: 50765,
-        command: dns::Command::Find { name: "streamline-control".parse().unwrap() }
+        command: dns::Command::Broadcast { name: Option::from("streamline-display".to_string()) }
     };
     thread::spawn(move || {
         println!("starting DNS");
@@ -42,7 +42,6 @@ async fn main() {
                     loop {
                         sleep(Duration::new(1000, 0));
                     }
-                    println!("Waited");
                 }
                 Err(e) => {
                     println!("{}", e);
@@ -59,9 +58,13 @@ async fn serve() {
         .and(warp::path::end())
         .and(warp::fs::file("./waiting.html"));
 
+    // TODO: route with a POST request with Scorekeeper AD URL, username, and password
+
     let routes = waiting;
     println!("routes constructed");
 
     warp::serve(routes).run(([0, 0, 0, 0], 3030)).await;
     println!("served");
 }
+
+// TODO: Function to handle logging into Scorekeeper
