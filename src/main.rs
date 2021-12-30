@@ -19,7 +19,7 @@ async fn main() {
         host: "0.0.0.0".parse().unwrap(),
         port: 50765,
         command: dns::Command::Broadcast {
-            name: Option::from("streamline-display".to_string()),
+            name: "streamline-display".to_string(),
         },
     };
     thread::spawn(move || {
