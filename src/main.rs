@@ -1,10 +1,16 @@
+use std::borrow::Borrow;
+use std::ptr::null;
 use headless_chrome::{Browser, LaunchOptionsBuilder};
 use std::thread;
 mod dns;
 use serde_derive::Deserialize;
 use std::thread::sleep;
 use std::time::Duration;
+use std::option::Option;
+use std::sync::Arc;
 use warp::Filter;
+
+static mut BROWSER_TAB: Option<Arc<headless_chrome::Tab>> = None;
 
 #[tokio::main]
 async fn main() {
@@ -22,7 +28,9 @@ async fn main() {
     });
     tokio::spawn(async move {
         println!("starting web server");
-        serve().await;
+        unsafe {
+            serve().await;
+        }
     });
     println!("after thread spawn");
     let browser = Browser::new(
@@ -35,14 +43,23 @@ async fn main() {
         Ok(b) => {
             let taba = b.wait_for_initial_tab();
             match taba {
-                Ok(tab) => {
-                    tab.navigate_to("http://localhost:3030/")
-                        .expect("Failed to navigate");
-                    tab.wait_until_navigated().expect("Could not navigate");
-                    tab.find_element("button")
-                        .expect("AA")
-                        .click()
-                        .expect("AAAAAA");
+                Ok(tab) => unsafe {
+                    BROWSER_TAB = Option::from(tab);
+                    match &BROWSER_TAB {
+                        Some(tabby) => {
+                            &tabby.navigate_to("http://localhost:3030/")
+                                .expect("Failed to navigate");
+                            &tabby.wait_until_navigated().expect("Could not navigate");
+                            &tabby.find_element("button")
+                                .expect("AA")
+                                .click()
+                                .expect("AAAAAA");
+                        }
+                        None => {
+                            println!("Something went terribly wrong");
+                        }
+                    }
+
                     loop {
                         sleep(Duration::new(1000, 0));
                     }
@@ -57,7 +74,7 @@ async fn main() {
         }
     }
 }
-async fn serve() {
+async unsafe fn serve() {
     let waiting = warp::get()
         .and(warp::path::end())
         .and(warp::fs::file("./waiting.html"));
@@ -66,7 +83,7 @@ async fn serve() {
     let navigate = warp::path!("navigate")
         .and(warp::post())
         .and(json_body())
-        .map(|data: Loginfo| sk_login(data));
+        .map(|data: DisplayURL| navigate(data));
 
     let routes = waiting.or(navigate);
     println!("routes constructed");
@@ -75,21 +92,26 @@ async fn serve() {
     println!("served");
 }
 
-// TODO: Function to handle logging into Scorekeeper
-fn sk_login(input: Loginfo) -> &'static str {
-    println!("{}", input.url);
-    return "aaaaaaaaaa";
+unsafe fn navigate(input: DisplayURL) -> &'static str {
+    return match &BROWSER_TAB {
+        Some(t) => {
+            t.navigate_to(&input.url).expect("Navigation error");
+            println!("{}", input.url);
+            "Navigated!"
+        }
+        None => {
+            "Error getting tab!"
+        }
+    }
 }
 
-fn json_body() -> impl Filter<Extract = (Loginfo,), Error = warp::Rejection> + Clone {
+fn json_body() -> impl Filter<Extract = (DisplayURL,), Error = warp::Rejection> + Clone {
     // When accepting a body, we want a JSON body
     // (and to reject huge payloads)...
     warp::body::content_length_limit(1024 * 16).and(warp::body::json())
 }
 
 #[derive(Deserialize, Debug)]
-struct Loginfo {
-    url: Box<str>,
-    username: Box<str>,
-    password: Box<str>,
+struct DisplayURL {
+    url: Box<str>
 }
